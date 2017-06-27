@@ -94,8 +94,9 @@ body {
 
 @media screen and (min-width: 64em) {
   .main-content {
-    max-width: 64rem;
-    padding: 2rem 6rem;
+    /*max-width: 64rem;*/
+    /*padding: 2rem 6rem;*/
+    padding: 10px 10px;
     margin: 0 auto;
     font-size: 1.1rem; } }
 
@@ -232,7 +233,12 @@ body {
   padding: 1rem 6rem; }
 
 .main-content {
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+  width: 50%;
+  float: left;
+  border: '1px solid blue';
+   /*height: '100%'}}*/
+}
 
 body {
   background-color: #FAFAFA;

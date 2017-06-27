@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getIEVersion } from './utils/browser-utils';
+// import { getIEVersion } from './utils/browser-utils';
 // import baseStyles from './node-renderer-default.scss';
 import './node-renderer-default.css';
 import { isDescendant } from './utils/tree-data-utils';
@@ -150,6 +150,7 @@ class NodeRendererDefault extends Component {
                           treeIndex,
                         })
                       : node.title}
+                      {` \u21E8 index: ${treeIndex} Path: [${path}]`}
                   </span>
 
                   {node.subtitle &&

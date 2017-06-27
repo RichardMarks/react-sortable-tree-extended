@@ -6,6 +6,7 @@
 
 .nodeContent {
   position: absolute;
+  border: 1px solid limegreen;
   top: 0;
   bottom: 0; }
 
@@ -16,6 +17,7 @@
    ========================================================================== */
 .lineBlock, .absoluteLineBlock {
   height: 100%;
+  border: 1px solid darkorange;  
   position: relative;
   display: inline-block; }
 
