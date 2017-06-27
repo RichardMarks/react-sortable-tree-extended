@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
-import SortableTree, { toggleExpandedForAll } from './react-sortable-tree/src/';
-import styles from './react-sortable-tree/src/examples/basicExample/stylesheets/app.scss';
-import './react-sortable-tree/src/examples/shared/favicon/apple-touch-icon.png';
-import './react-sortable-tree/src/examples/shared/favicon/favicon-16x16.png';
-import './react-sortable-tree/src/examples/shared/favicon/favicon-32x32.png';
-import './react-sortable-tree/src/examples/shared/favicon/favicon.ico';
-import './react-sortable-tree/src/examples/shared/favicon/safari-pinned-tab.svg';
-
-console.log('styles ->', styles)
+import ReactDOM from 'react-dom';
+import SortableTree, { toggleExpandedForAll } from '../../index';
+import styles from './stylesheets/app.scss';
+import '../shared/favicon/apple-touch-icon.png';
+import '../shared/favicon/favicon-16x16.png';
+import '../shared/favicon/favicon-32x32.png';
+import '../shared/favicon/favicon.ico';
+import '../shared/favicon/safari-pinned-tab.svg';
 
 const maxDepth = 5;
 
@@ -353,5 +351,4 @@ class App extends Component {
   }
 }
 
-// ReactDOM.render(<App />, document.getElementById('app'));
-export default App
+ReactDOM.render(<App />, document.getElementById('app'));

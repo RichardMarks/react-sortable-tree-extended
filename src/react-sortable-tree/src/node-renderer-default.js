@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getIEVersion } from './utils/browser-utils';
-import baseStyles from './node-renderer-default.scss';
+// import baseStyles from './node-renderer-default.scss';
+import './node-renderer-default.css';
 import { isDescendant } from './utils/tree-data-utils';
 
-let styles = baseStyles;
+// let styles = baseStyles;
+// console.log('styles ---->', styles)
 // Add extra classes in browsers that don't support flex
-if (getIEVersion < 10) {
-  styles = {
-    ...baseStyles,
-    row: `${styles.row} ${styles.row_NoFlex}`,
-    rowContents: `${styles.rowContents} ${styles.rowContents_NoFlex}`,
-    rowLabel: `${styles.rowLabel} ${styles.rowLabel_NoFlex}`,
-    rowToolbar: `${styles.rowToolbar} ${styles.rowToolbar_NoFlex}`,
-  };
-}
+// if (getIEVersion < 10) {
+//   styles = {
+//     ...baseStyles,
+//     row: `${'row} ${'row_NoFlex}`,
+//     rowContents: `${'rowContents} ${'rowContents_NoFlex}`,
+//     rowLabel: `${'rowLabel} ${'rowLabel_NoFlex}`,
+//     rowToolbar: `${'rowToolbar} ${'rowToolbar_NoFlex}`,
+//   };
+// }
 
 class NodeRendererDefault extends Component {
   render() {
@@ -51,26 +53,26 @@ class NodeRendererDefault extends Component {
         // Show a loading symbol on the handle when the children are expanded
         //  and yet still defined by a function (a callback to fetch the children)
         handle = (
-          <div className={styles.loadingHandle}>
-            <div className={styles.loadingCircle}>
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
-              <div className={styles.loadingCirclePoint} />
+          <div className={'loadingHandle'}>
+            <div className={'loadingCircle'}>
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
+              <div className={'loadingCirclePoint'} />
             </div>
           </div>
         );
       } else {
         // Show the handle used to initiate a drag-and-drop
-        handle = connectDragSource(<div className={styles.moveHandle} />, {
+        handle = connectDragSource(<div className={'moveHandle'} />, {
           dropEffect: 'copy',
         });
       }
@@ -89,7 +91,7 @@ class NodeRendererDefault extends Component {
               type="button"
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
               className={
-                node.expanded ? styles.collapseButton : styles.expandButton
+                node.expanded ? 'collapseButton' : 'expandButton'
               }
               style={{ left: -0.5 * scaffoldBlockPxWidth }}
               onClick={() =>
@@ -104,22 +106,22 @@ class NodeRendererDefault extends Component {
               !isDragging &&
               <div
                 style={{ width: scaffoldBlockPxWidth }}
-                className={styles.lineChildren}
+                className={'lineChildren'}
               />}
           </div>}
 
-        <div className={styles.rowWrapper}>
+        <div className={'rowWrapper'}>
           {/* Set the row preview to be used during drag and drop */}
           {connectDragPreview(
             <div
               className={
-                styles.row +
-                (isLandingPadActive ? ` ${styles.rowLandingPad}` : '') +
+                'row' +
+                (isLandingPadActive ? ` ${'rowLandingPad'}` : '') +
                 (isLandingPadActive && !canDrop
-                  ? ` ${styles.rowCancelPad}`
+                  ? ` ${'rowCancelPad'}`
                   : '') +
-                (isSearchMatch ? ` ${styles.rowSearchMatch}` : '') +
-                (isSearchFocus ? ` ${styles.rowSearchFocus}` : '') +
+                (isSearchMatch ? ` ${'rowSearchMatch'}` : '') +
+                (isSearchFocus ? ` ${'rowSearchFocus'}` : '') +
                 (className ? ` ${className}` : '')
               }
               style={{
@@ -131,15 +133,15 @@ class NodeRendererDefault extends Component {
 
               <div
                 className={
-                  styles.rowContents +
-                  (!canDrag ? ` ${styles.rowContentsDragDisabled}` : '')
+                  'rowContents' +
+                  (!canDrag ? ` ${'rowContentsDragDisabled'}` : '')
                 }
               >
-                <div className={styles.rowLabel}>
+                <div className={'rowLabel'}>
                   <span
                     className={
-                      styles.rowTitle +
-                      (node.subtitle ? ` ${styles.rowTitleWithSubtitle}` : '')
+                      'rowTitle' +
+                      (node.subtitle ? ` ${'rowTitleWithSubtitle'}` : '')
                     }
                   >
                     {typeof node.title === 'function'
@@ -152,7 +154,7 @@ class NodeRendererDefault extends Component {
                   </span>
 
                   {node.subtitle &&
-                    <span className={styles.rowSubtitle}>
+                    <span className={'rowSubtitle'}>
                       {typeof node.subtitle === 'function'
                         ? node.subtitle({
                             node,
@@ -163,11 +165,11 @@ class NodeRendererDefault extends Component {
                     </span>}
                 </div>
 
-                <div className={styles.rowToolbar}>
+                <div className={'rowToolbar'}>
                   {buttons.map((btn, index) =>
                     <div
                       key={index} // eslint-disable-line react/no-array-index-key
-                      className={styles.toolbarButton}
+                      className={'toolbarButton'}
                     >
                       {btn}
                     </div>

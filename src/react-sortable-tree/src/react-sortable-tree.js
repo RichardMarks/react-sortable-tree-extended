@@ -35,7 +35,8 @@ import {
   dndWrapSource,
   dndWrapTarget,
 } from './utils/drag-and-drop-utils';
-import styles from './react-sortable-tree.scss';
+// import styles from './react-sortable-tree.scss';
+import './react-sortable-tree.css';
 
 let dndTypeCounter = 1;
 
@@ -448,7 +449,7 @@ class ReactSortableTree extends Component {
               horizontalStrength={this.hStrength}
               speed={30}
               scrollToAlignment="start"
-              className={styles.virtualScrollOverride}
+              className={'virtualScrollOverride'}
               width={width}
               onScroll={({ scrollTop }) => {
                 this.scrollTop = scrollTop;
@@ -491,7 +492,7 @@ class ReactSortableTree extends Component {
 
     return (
       <div
-        className={styles.tree + (className ? ` ${className}` : '')}
+        className={'tree' + (className ? ` ${className}` : '')}
         style={containerStyle}
       >
         {list}

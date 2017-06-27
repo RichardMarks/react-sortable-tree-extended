@@ -1,7 +1,7 @@
 import React, { Component, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
-import styles from './tree-node.scss';
-
+// import styles from './tree-node.scss';
+import './tree-node.css';
 class TreeNode extends Component {
   render() {
     const {
@@ -45,7 +45,7 @@ class TreeNode extends Component {
           // |  +--+
           // |  |  |
           // +--+--+
-          lineClass = `${styles.lineHalfHorizontalRight} ${styles.lineHalfVerticalBottom}`;
+          lineClass = `${'lineHalfHorizontalRight'} ${'lineHalfVerticalBottom'}`;
         } else if (i === scaffoldBlockCount - 1) {
           // Last scaffold block in the row, right before the row content
           // +--+--+
@@ -53,7 +53,7 @@ class TreeNode extends Component {
           // |  +--+
           // |  |  |
           // +--+--+
-          lineClass = `${styles.lineHalfHorizontalRight} ${styles.lineFullVertical}`;
+          lineClass = `${'lineHalfHorizontalRight'} ${'lineFullVertical'}`;
         } else {
           // Simply connecting the line extending down to the next sibling on this level
           // +--+--+
@@ -61,7 +61,7 @@ class TreeNode extends Component {
           // |  |  |
           // |  |  |
           // +--+--+
-          lineClass = styles.lineFullVertical;
+          lineClass = 'lineFullVertical';
         }
       } else if (listIndex === 0) {
         // Top-left corner of the tree, but has no siblings
@@ -70,7 +70,7 @@ class TreeNode extends Component {
         // |  +--+
         // |     |
         // +-----+
-        lineClass = styles.lineHalfHorizontalRight;
+        lineClass = 'lineHalfHorizontalRight';
       } else if (i === scaffoldBlockCount - 1) {
         // The last or only node in this level of the tree
         // +--+--+
@@ -78,14 +78,14 @@ class TreeNode extends Component {
         // |  +--+
         // |     |
         // +-----+
-        lineClass = `${styles.lineHalfVerticalTop} ${styles.lineHalfHorizontalRight}`;
+        lineClass = `${'lineHalfVerticalTop'} ${'lineHalfHorizontalRight'}`;
       }
 
       scaffold.push(
         <div
           key={`pre_${i}`}
           style={{ width: scaffoldBlockPxWidth }}
-          className={`${styles.lineBlock} ${lineClass}`}
+          className={`${'lineBlock'} ${lineClass}`}
         />
       );
 
@@ -97,13 +97,13 @@ class TreeNode extends Component {
         if (listIndex === swapFrom + swapLength - 1) {
           // This block is on the bottom (target) line
           // This block points at the target block (where the row will go when released)
-          highlightLineClass = styles.highlightBottomLeftCorner;
+          highlightLineClass = 'highlightBottomLeftCorner';
         } else if (treeIndex === swapFrom) {
           // This block is on the top (source) line
-          highlightLineClass = styles.highlightTopLeftCorner;
+          highlightLineClass = 'highlightTopLeftCorner';
         } else {
           // This block is between the bottom and top
-          highlightLineClass = styles.highlightLineVertical;
+          highlightLineClass = 'highlightLineVertical';
         }
 
         scaffold.push(
@@ -113,18 +113,18 @@ class TreeNode extends Component {
               width: scaffoldBlockPxWidth,
               left: scaffoldBlockPxWidth * i,
             }}
-            className={`${styles.absoluteLineBlock} ${highlightLineClass}`}
+            className={`${'absoluteLineBlock'} ${highlightLineClass}`}
           />
         );
       }
     });
 
     return connectDropTarget(
-      <div {...otherProps} className={styles.node}>
+      <div {...otherProps} className={'node'}>
         {scaffold}
 
         <div
-          className={styles.nodeContent}
+          className={'nodeContent'}
           style={{ left: scaffoldBlockPxWidth * scaffoldBlockCount }}
         >
           {Children.map(children, child =>
