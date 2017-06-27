@@ -8,8 +8,6 @@ import './react-sortable-tree/src/examples/shared/favicon/favicon-32x32.png';
 import './react-sortable-tree/src/examples/shared/favicon/favicon.ico';
 import './react-sortable-tree/src/examples/shared/favicon/safari-pinned-tab.svg';
 
-console.log('styles ->', styles)
-
 const maxDepth = 5;
 
 class App extends Component {

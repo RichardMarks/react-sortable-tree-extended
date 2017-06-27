@@ -6,7 +6,6 @@ import './node-renderer-default.css';
 import { isDescendant } from './utils/tree-data-utils';
 
 // let styles = baseStyles;
-// console.log('styles ---->', styles)
 // Add extra classes in browsers that don't support flex
 // if (getIEVersion < 10) {
 //   styles = {
