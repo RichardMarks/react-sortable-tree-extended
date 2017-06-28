@@ -1,0 +1,8 @@
+.externalNode {
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 70px;
+      background-color:lightgreen;
+}

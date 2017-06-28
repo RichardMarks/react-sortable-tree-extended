@@ -17,6 +17,7 @@ const maxDepth = 5;
 class App extends Component {
   constructor(props) {
     super(props);
+    this.getTreeData = this.getTreeData.bind(this)
 
     // const renderDepthTitle = ({ path }) => `Depth: ${path.length}`;
 
@@ -157,6 +158,11 @@ class App extends Component {
     this.setState({ treeData });
   }
 
+  getTreeData() {
+    const treeData = this.state.treeData.slice()
+    return treeData
+  }
+
   expand(expanded) {
     this.setState({
       treeData: toggleExpandedForAll({
@@ -181,7 +187,7 @@ class App extends Component {
       treeData,
       searchString,
       searchFocusIndex,
-      searchFoundCount,
+      // searchFoundCount,
     } = this.state;
 
     const alertNodeInfo = ({ node, path, treeIndex }) => {
@@ -197,19 +203,19 @@ class App extends Component {
       );
     };
 
-    const selectPrevMatch = () =>
-      this.setState({
-        searchFocusIndex: searchFocusIndex !== null
-          ? (searchFoundCount + searchFocusIndex - 1) % searchFoundCount
-          : searchFoundCount - 1,
-      });
+    // const selectPrevMatch = () =>
+    //   this.setState({
+    //     searchFocusIndex: searchFocusIndex !== null
+    //       ? (searchFoundCount + searchFocusIndex - 1) % searchFoundCount
+    //       : searchFoundCount - 1,
+    //   });
 
-    const selectNextMatch = () =>
-      this.setState({
-        searchFocusIndex: searchFocusIndex !== null
-          ? (searchFocusIndex + 1) % searchFoundCount
-          : 0,
-      });
+    // const selectNextMatch = () =>
+    //   this.setState({
+    //     searchFocusIndex: searchFocusIndex !== null
+    //       ? (searchFocusIndex + 1) % searchFoundCount
+    //       : 0,
+    //   });
 
     const isVirtualized = true;
     const treeContainerStyle = isVirtualized ? { height: '500px', border: '1px solid darkblue' } : {};
@@ -283,7 +289,7 @@ class App extends Component {
               treeData={treeData}
               onChange={this.updateTreeData}
               onMoveNode={({ node, treeIndex, path }) =>
-                global.console.debug(
+                console.warn(
                   'node:',
                   node,
                   'treeIndex:',
@@ -322,7 +328,10 @@ class App extends Component {
           </div>
         </section>
           <div className={'main-content'} style={{ border: '1px solid blue', height: '100%', width: '250px'}}>
-            <ExternalNodeContainer/>
+            <ExternalNodeContainer
+              getTreeData={this.getTreeData}
+              updateTreeData={this.updateTreeData}
+            />
           </div>
       </div>
     );

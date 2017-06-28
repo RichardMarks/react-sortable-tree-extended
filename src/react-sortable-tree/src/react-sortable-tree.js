@@ -227,6 +227,7 @@ class ReactSortableTree extends Component {
       searchFocusTreeIndex,
     });
   }
+  
 
   startDrag({ path }) {
     const draggingTreeData = removeNodeAtPath({
@@ -243,6 +244,7 @@ class ReactSortableTree extends Component {
   dragHover({ node: draggedNode, depth, minimumTreeIndex }) {
     // Fall back to the tree data if something is being dragged in from
     //  an external element
+    // TODO: this is where the actual swapping of rows occurs
     const draggingTreeData = this.state.draggingTreeData || this.props.treeData;
 
     const addedResult = memoizedInsertNode({
@@ -375,6 +377,7 @@ class ReactSortableTree extends Component {
       : canDrag(callbackParams);
 
     return (
+      // Both TreeNodeRenderer and 
       <TreeNodeRenderer
         style={style}
         key={nodeKey}

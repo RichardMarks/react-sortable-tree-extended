@@ -6,10 +6,11 @@ import {
 import HTML5Backend from 'react-dnd-html5-backend';
 import { getDepth } from './tree-data-utils';
 import { memoizedInsertNode } from './memoized-tree-data-utils';
+// import { insertNode } from './tree-data-utils';
 
 const nodeDragSource = {
   beginDrag(props) {
-    props.startDrag(props);
+    props.startDrag(props); // <-- get nearest node here, and so return corresponding data as to break the API as little as possible
 
     return {
       node: props.node,
@@ -24,7 +25,7 @@ const nodeDragSource = {
   },
 
   isDragging(props, monitor) {
-    const dropTargetNode = monitor.getItem().node;
+    const dropTargetNode = monitor.getItem().node;// || monitor.getItem().nearestNode; <- idea
     const draggedNode = props.node;
 
     return draggedNode === dropTargetNode;
@@ -113,39 +114,85 @@ function canDrop(dropTargetProps, monitor) {
 
   return true;
 }
-
+// TODO: what my external drag source interacts with
 const nodeDropTarget = {
-  drop(dropTargetProps, monitor) {
-    return {
-      node: monitor.getItem().node,
-      path: monitor.getItem().path,
-      minimumTreeIndex: dropTargetProps.treeIndex,
-      depth: getTargetDepth(dropTargetProps, monitor),
-    };
-  },
+    drop (dropTargetProps, monitor) {
+      return {
+        
+      }
+    },
+  // drop(dropTargetProps, monitor) {
+  //   return {
+  //     node: monitor.getItem().node,
+  //     path: monitor.getItem().path,
+  //     minimumTreeIndex: dropTargetProps.treeIndex,
+  //     depth: getTargetDepth(dropTargetProps, monitor),
+  //   };
+  // },
 
+  // TODO: **ALL** moving around of tree nodes occurs _here_ but NOT setting of permanent tree state
   hover(dropTargetProps, monitor) {
-    const targetDepth = getTargetDepth(dropTargetProps, monitor);
-    const draggedNode = monitor.getItem().node;
-    const needsRedraw =
-      // Redraw if hovered above different nodes
-      dropTargetProps.node !== draggedNode ||
-      // Or hovered above the same node but at a different depth
-      targetDepth !== dropTargetProps.path.length - 1;
+    // const targetDepth = getTargetDepth(dropTargetProps, monitor);
+    // const draggedNode = monitor.getItem().node;
+    const {
+      node,
+      treeIndex, 
+      listIndex, 
+    } = {...dropTargetProps}
+    const hoveredOnNode = dropTargetProps.node
+    const treeData = monitor.getItem().treeData.slice()
+    
+    // console.log('passed data from my dragSource ->', monitor.getItem().treeData)
+    const hoveredNode = {}
+    hoveredNode.title = 'TEST NODE'
+    hoveredNode.treeIndex = node.treeIndex
+    hoveredNode.subtitle = 'So this is something...'
+    // hoveredNode.path = nextPath.push(node.treeIndex + 1)
+    // const newNodeTEST = {
+    //   title: 'TEST NODE',
+    //   subtitle: 'So this is something...',
+    //   children: []
+    // }
+    // TODO: here -> use dropTargetProps.node as input to create the required params for to create a 'synthetic' draggedNode
+    // console.log('hovered node is ->', dropTargetProps.node)
+    // console.log('hovered node is ->', dropTargetProps.node)
 
-    if (!needsRedraw) {
-      return;
-    }
+    // insert external node here
+    const hoveredInsertResultTree = memoizedInsertNode({
+      treeData,
+      depth: listIndex,
+      minimumTreeIndex: listIndex,
+      expandParent: true,
+      getNodeKey: (treeIndex) => treeIndex,
+      newNode: hoveredNode
+    }).treeData
 
-    dropTargetProps.dragHover({
-      node: draggedNode,
-      path: monitor.getItem().path,
-      minimumTreeIndex: dropTargetProps.listIndex,
-      depth: targetDepth,
-    });
+    monitor.getItem().updateTreeData(hoveredInsertResultTree)
+    // dropTargetProps.updateFromNewHover(hoveredInsertResultTree)
+
+    // console.log('insertResult ->', {...hoveredInsertResultTree})
+
+
+
+    // const needsRedraw =
+    //   // Redraw if hovered above different nodes
+    //   dropTargetProps.node !== draggedNode ||
+    //   // Or hovered above the same node but at a different depth
+    //   targetDepth !== dropTargetProps.path.length - 1;
+
+    // if (!needsRedraw) {
+    //   return;
+    // }
+
+    // dropTargetProps.dragHover({
+    //   node: draggedNode,
+    //   path: monitor.getItem().path,
+    //   minimumTreeIndex: dropTargetProps.listIndex,
+    //   depth: targetDepth,
+    // });
   },
 
-  canDrop,
+  // canDrop,
 };
 
 function nodeDragSourcePropInjection(connect, monitor) {
