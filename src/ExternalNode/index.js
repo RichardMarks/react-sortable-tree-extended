@@ -40,8 +40,8 @@ class ExternalNode extends Component {
   render () {
     return this.props.connectDragPreview(
       <div className='externalNode'>
-        ExternalNode
-        {this.props.connectDragSource(<div>DRAG</div>)}
+        External Node
+        {this.props.connectDragSource(<div className='externalNode-handle'/>)}
       </div>
     )
   }

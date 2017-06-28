@@ -1,8 +1,21 @@
 .externalNode {
       border: 1px solid black;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      height: 70px;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      font-size: 16px;
+      height: 40px;
+      width: 180px;
       background-color:lightgreen;
+}
+
+.externalNode-handle {
+      height: 100%;
+      width: 44px;
+      background: lightblue url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MiIgaGVpZ2h0PSI0MiI+PGcgc3Ryb2tlPSIjRkZGIiBzdHJva2Utd2lkdGg9IjIuOSIgPjxwYXRoIGQ9Ik0xNCAxNS43aDE0LjQiLz48cGF0aCBkPSJNMTQgMjEuNGgxNC40Ii8+PHBhdGggZD0iTTE0IDI3LjFoMTQuNCIvPjwvZz4KPC9zdmc+") no-repeat center;
+      border: solid lightcyan 1px;
+      box-shadow: 0 2px 2px -2px;
+      cursor: move;
+      border-radius: 1px;
+      z-index: 1;
 }
