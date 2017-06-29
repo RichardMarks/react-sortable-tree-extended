@@ -120,11 +120,13 @@ class TreeNode extends Component {
     });
 
     return connectDropTarget(
+      // TODO: kind of liking this approach to highlighting on isOver
+      // <div {...otherProps} className={isOver ? 'nodeExternal' : 'node'}>
       <div {...otherProps} className={'node'}>
         {scaffold}
 
         <div
-          className={'nodeContent'}
+          className={isOver ? 'external' :'nodeContent'}
           style={{ left: scaffoldBlockPxWidth * scaffoldBlockCount }}
         >
           {Children.map(children, child =>

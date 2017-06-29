@@ -9,6 +9,17 @@
       background-color:lightgreen;
 }
 
+.dragging {
+      border: 1px solid black;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      font-size: 16px;
+      height: 40px;
+      width: 180px;
+      background-color:yellowgreen;
+}
+
 .externalNode-handle {
       height: 100%;
       width: 44px;

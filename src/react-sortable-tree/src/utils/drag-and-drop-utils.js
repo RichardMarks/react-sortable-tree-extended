@@ -34,7 +34,7 @@ const nodeDragSource = {
 
 function getTargetDepth(dropTargetProps, monitor) {
   let dropTargetDepth = 0;
-  const draggedItem = monitor.getItem();
+  const draggedItem = dropTargetProps//monitor.getItem();
   const rowAbove = dropTargetProps.getPrevRow();
   if (rowAbove) {
     // Limit the length of the path to the deepest possible
@@ -44,7 +44,11 @@ function getTargetDepth(dropTargetProps, monitor) {
     );
   }
 
-  const blocksOffset = Math.round(
+  // const blocksOffset = 0//Math.round(
+  // //   monitor.getDifferenceFromInitialOffset().x /
+  // //     dropTargetProps.scaffoldBlockPxWidth
+  // // );
+    const blocksOffset = Math.round(
     monitor.getDifferenceFromInitialOffset().x /
       dropTargetProps.scaffoldBlockPxWidth
   );
@@ -59,7 +63,7 @@ function getTargetDepth(dropTargetProps, monitor) {
     typeof dropTargetProps.maxDepth !== 'undefined' &&
     dropTargetProps.maxDepth !== null
   ) {
-    const draggedNode = monitor.getItem().node;
+    const draggedNode = dropTargetProps.node//monitor.getItem().node;
     const draggedChildDepth = getDepth(draggedNode);
 
     targetDepth = Math.min(
@@ -117,8 +121,13 @@ function canDrop(dropTargetProps, monitor) {
 // TODO: what my external drag source interacts with
 const nodeDropTarget = {
     drop (dropTargetProps, monitor) {
+      // console.log('treeData on drop:', dropTargetProps.treeData)
       return {
-        
+        node: dropTargetProps.node,
+        path: dropTargetProps.path,
+        treeIndex: dropTargetProps.treeIndex,
+        treeData: dropTargetProps.treeData,
+        depth: getTargetDepth(dropTargetProps,monitor)
       }
     },
   // drop(dropTargetProps, monitor) {
@@ -131,6 +140,13 @@ const nodeDropTarget = {
   // },
 
   // TODO: **ALL** moving around of tree nodes occurs _here_ but NOT setting of permanent tree state
+  
+  /* 
+    FIXME: on hover the ONLY place that the new, external node can be seen in state
+    is inside of the rows state object -NOT- (and should be) in treeData...
+    which causes the new node to be lost on another node change or even another external
+    node brought in 
+  */
   hover(dropTargetProps, monitor) {
     // const targetDepth = getTargetDepth(dropTargetProps, monitor);
     // const draggedNode = monitor.getItem().node;
@@ -140,13 +156,20 @@ const nodeDropTarget = {
       listIndex, 
     } = {...dropTargetProps}
     const hoveredOnNode = dropTargetProps.node
-    const treeData = monitor.getItem().treeData.slice()
+    const hoveredNodePath = dropTargetProps.path
+    const hoveredNodePreviousRow = dropTargetProps.getPrevRow()
+    const monitorGetItem = monitor.getItem()
+    // console.log('monitorGetItem', monitorGetItem)
+    const hoveredDepth = getTargetDepth(dropTargetProps,monitor)
+    // console.log('hoveredDepth', hoveredDepth)
+    // const treeData = monitor.getItem().treeData.slice()
     
     // console.log('passed data from my dragSource ->', monitor.getItem().treeData)
     const hoveredNode = {}
     hoveredNode.title = 'TEST NODE'
-    hoveredNode.treeIndex = node.treeIndex
+    hoveredNode.treeIndex = node.treeIndex + 1
     hoveredNode.subtitle = 'So this is something...'
+    hoveredNode.children = []
     // hoveredNode.path = nextPath.push(node.treeIndex + 1)
     // const newNodeTEST = {
     //   title: 'TEST NODE',
@@ -156,18 +179,18 @@ const nodeDropTarget = {
     // TODO: here -> use dropTargetProps.node as input to create the required params for to create a 'synthetic' draggedNode
     // console.log('hovered node is ->', dropTargetProps.node)
     // console.log('hovered node is ->', dropTargetProps.node)
-
     // insert external node here
-    const hoveredInsertResultTree = memoizedInsertNode({
-      treeData,
-      depth: listIndex,
-      minimumTreeIndex: listIndex,
-      expandParent: true,
-      getNodeKey: (treeIndex) => treeIndex,
-      newNode: hoveredNode
-    }).treeData
+    // const hoveredInsertResultTree = memoizedInsertNode({
+    //   treeData,
+    //   depth: listIndex,
+    //   minimumTreeIndex: listIndex,
+    //   expandParent: true,
+    //   getNodeKey: (treeIndex) => treeIndex,
+    //   newNode: hoveredNode
+    // }).treeData
 
-    monitor.getItem().updateTreeData(hoveredInsertResultTree)
+
+    // monitor.getItem().updateTreeData(hoveredInsertResultTree)
     // dropTargetProps.updateFromNewHover(hoveredInsertResultTree)
 
     // console.log('insertResult ->', {...hoveredInsertResultTree})
@@ -184,12 +207,14 @@ const nodeDropTarget = {
     //   return;
     // }
 
-    // dropTargetProps.dragHover({
-    //   node: draggedNode,
-    //   path: monitor.getItem().path,
-    //   minimumTreeIndex: dropTargetProps.listIndex,
-    //   depth: targetDepth,
-    // });
+    // NOTE: -> kind of works but WAY too slow with external nodes...
+    dropTargetProps.dragHover({
+      node: hoveredNode,//draggedNode,
+      path: dropTargetProps.path,//monitor.getItem().path,
+      minimumTreeIndex: dropTargetProps.treeIndex,//dropTargetProps.listIndex,
+      depth: hoveredDepth,//targetDepth,
+      // isExternal: true
+    });
   },
 
   // canDrop,
@@ -206,10 +231,12 @@ function nodeDragSourcePropInjection(connect, monitor) {
 
 function nodeDropTargetPropInjection(connect, monitor) {
   const dragged = monitor.getItem();
+  // console.log('isOver:', monitor.isOver())
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop(),
+    // externalIsOver: monitor.getItem(),
     draggedNode: dragged ? dragged.node : null,
   };
 }

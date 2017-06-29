@@ -67,6 +67,7 @@ class ReactSortableTree extends Component {
 
     this.state = {
       draggingTreeData: null,
+      externalNode: null,
       swapFrom: null,
       swapLength: null,
       swapDepth: null,
@@ -77,9 +78,14 @@ class ReactSortableTree extends Component {
 
     this.toggleChildrenVisibility = this.toggleChildrenVisibility.bind(this);
     this.moveNode = this.moveNode.bind(this);
+    this.updateTree = this.updateTree.bind(this)
     this.startDrag = this.startDrag.bind(this);
     this.dragHover = this.dragHover.bind(this);
     this.endDrag = this.endDrag.bind(this);
+  }
+
+  updateTree(treeData) {
+    this.setState({treeData})
   }
 
   componentWillMount() {
@@ -241,7 +247,7 @@ class ReactSortableTree extends Component {
     });
   }
 
-  dragHover({ node: draggedNode, depth, minimumTreeIndex }) {
+  dragHover({ node: draggedNode, depth, minimumTreeIndex, isExternal }) {
     // Fall back to the tree data if something is being dragged in from
     //  an external element
     // TODO: this is where the actual swapping of rows occurs
@@ -267,6 +273,7 @@ class ReactSortableTree extends Component {
       swapFrom,
       swapLength,
       swapDepth: depth,
+      externalNode: draggedNode,
       draggingTreeData: changeNodeAtPath({
         treeData: draggingTreeData,
         path: expandedParentPath.slice(0, -1),
@@ -347,6 +354,7 @@ class ReactSortableTree extends Component {
   ) {
     const {
       canDrag,
+      externalNode,
       canDrop,
       generateNodeProps,
       getNodeKey,
