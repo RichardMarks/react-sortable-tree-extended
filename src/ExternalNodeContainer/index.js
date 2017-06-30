@@ -3,6 +3,11 @@ import ExternalNode from '../ExternalNode'
 
 class ExternalNodeContainer extends Component {
   render () {
+    const myNode = {
+      title:"-TEST NODE-",
+      subtitle: 'another test node',
+      children: []
+    }
     return (
       <div style={{
         display:'flex', 
@@ -16,18 +21,22 @@ class ExternalNodeContainer extends Component {
       }}>
         <ExternalNode
           getTreeData={this.props.getTreeData}
+          node={myNode}
           updateTreeData={this.props.updateTreeData}
         />
         <ExternalNode
           getTreeData={this.props.getTreeData}
+          node={myNode}          
           updateTreeData={this.props.updateTreeData}          
         />
         <ExternalNode
           getTreeData={this.props.getTreeData}
+          node={myNode}          
           updateTreeData={this.props.updateTreeData}
         />
         <ExternalNode
-          getTreeData={this.props.getTreeData}          
+          getTreeData={this.props.getTreeData}    
+          node={myNode}                
           updateTreeData={this.props.updateTreeData}
         />
       </div>

@@ -11,12 +11,13 @@ import { memoizedInsertNode } from './memoized-tree-data-utils';
 const nodeDragSource = {
   beginDrag(props) {
     props.startDrag(props); // <-- get nearest node here, and so return corresponding data as to break the API as little as possible
-
+    console.log(props)
     return {
       node: props.node,
       parentNode: props.parentNode,
       path: props.path,
       treeIndex: props.treeIndex,
+      isExternalNode: false
     };
   },
 
@@ -48,7 +49,7 @@ function getTargetDepth(dropTargetProps, monitor) {
   // //   monitor.getDifferenceFromInitialOffset().x /
   // //     dropTargetProps.scaffoldBlockPxWidth
   // // );
-    const blocksOffset = Math.round(
+    const blocksOffset = Math.floor(
     monitor.getDifferenceFromInitialOffset().x /
       dropTargetProps.scaffoldBlockPxWidth
   );
@@ -121,22 +122,28 @@ function canDrop(dropTargetProps, monitor) {
 // TODO: what my external drag source interacts with
 const nodeDropTarget = {
     drop (dropTargetProps, monitor) {
-      // console.log('treeData on drop:', dropTargetProps.treeData)
-      return {
-        node: dropTargetProps.node,
-        path: dropTargetProps.path,
-        treeIndex: dropTargetProps.treeIndex,
-        treeData: dropTargetProps.treeData,
-        depth: getTargetDepth(dropTargetProps,monitor)
+      const isExternalNode = monitor.getItem().isExternalNode
+      if (isExternalNode) {
+// console.log('treeData on drop:', dropTargetProps.treeData)
+        return {
+          node: dropTargetProps.node,
+          path: dropTargetProps.path,
+          treeIndex: dropTargetProps.treeIndex,
+          treeData: dropTargetProps.treeData,
+          depth: getTargetDepth(dropTargetProps,monitor)
+        }
+      } else {
+        return {
+          node: monitor.getItem().node,
+          path: monitor.getItem().path,
+          minimumTreeIndex: dropTargetProps.treeIndex,
+          depth: getTargetDepth(dropTargetProps, monitor),
+        };
+
       }
+      
     },
-  // drop(dropTargetProps, monitor) {
-  //   return {
-  //     node: monitor.getItem().node,
-  //     path: monitor.getItem().path,
-  //     minimumTreeIndex: dropTargetProps.treeIndex,
-  //     depth: getTargetDepth(dropTargetProps, monitor),
-  //   };
+  
   // },
 
   // TODO: **ALL** moving around of tree nodes occurs _here_ but NOT setting of permanent tree state
@@ -148,28 +155,59 @@ const nodeDropTarget = {
     node brought in 
   */
   hover(dropTargetProps, monitor) {
-    // const targetDepth = getTargetDepth(dropTargetProps, monitor);
-    // const draggedNode = monitor.getItem().node;
-    const {
-      node,
-      treeIndex, 
-      listIndex, 
-    } = {...dropTargetProps}
-    const hoveredOnNode = dropTargetProps.node
-    const hoveredNodePath = dropTargetProps.path
-    const hoveredNodePreviousRow = dropTargetProps.getPrevRow()
-    const monitorGetItem = monitor.getItem()
-    // console.log('monitorGetItem', monitorGetItem)
-    const hoveredDepth = getTargetDepth(dropTargetProps,monitor)
+    const isExternalNode = monitor.getItem().isExternalNode
+    if (isExternalNode) {
+      const hoveredOnNode = dropTargetProps.node
+      const hoveredNodePath = dropTargetProps.path
+      const hoveredNodePreviousRow = dropTargetProps.getPrevRow()
+      const monitorGetItem = monitor.getItem()
+      // console.log('monitorGetItem', monitorGetItem)
+      const hoveredDepth = getTargetDepth(dropTargetProps,monitor)
+      const hoveredNode = {}
+      hoveredNode.title = 'TEST NODE'
+      // hoveredNode.treeIndex = node.treeIndex
+      hoveredNode.subtitle = 'So this is something...'
+      hoveredNode.children = []
+      dropTargetProps.dragHover({
+        node: hoveredNode,//draggedNode,
+        path: dropTargetProps.path,//monitor.getItem().path,
+        minimumTreeIndex: dropTargetProps.treeIndex,//dropTargetProps.listIndex,
+        depth: hoveredDepth,//targetDepth,
+        // isExternal: true
+      });
+    } else {
+
+      const targetDepth = getTargetDepth(dropTargetProps, monitor);
+      const draggedNode = monitor.getItem().node;
+      const {
+        node,
+        treeIndex, 
+        listIndex, 
+      } = {...dropTargetProps}
+      const needsRedraw =
+        dropTargetProps.node !== draggedNode ||
+        // Or hovered above the same node but at a different depth
+        targetDepth !== dropTargetProps.path.length - 1;
+
+      if (!needsRedraw) {
+        return;
+      }
+
+      dropTargetProps.dragHover({
+        node: draggedNode,
+        path: monitor.getItem().path,
+        minimumTreeIndex: dropTargetProps.listIndex,
+        depth: targetDepth,
+        // isExternal: true
+      });
+    }
+    
+    
     // console.log('hoveredDepth', hoveredDepth)
     // const treeData = monitor.getItem().treeData.slice()
     
     // console.log('passed data from my dragSource ->', monitor.getItem().treeData)
-    const hoveredNode = {}
-    hoveredNode.title = 'TEST NODE'
-    hoveredNode.treeIndex = node.treeIndex + 1
-    hoveredNode.subtitle = 'So this is something...'
-    hoveredNode.children = []
+    
     // hoveredNode.path = nextPath.push(node.treeIndex + 1)
     // const newNodeTEST = {
     //   title: 'TEST NODE',
@@ -199,22 +237,16 @@ const nodeDropTarget = {
 
     // const needsRedraw =
     //   // Redraw if hovered above different nodes
-    //   dropTargetProps.node !== draggedNode ||
-    //   // Or hovered above the same node but at a different depth
-    //   targetDepth !== dropTargetProps.path.length - 1;
 
-    // if (!needsRedraw) {
-    //   return;
-    // }
 
     // NOTE: -> kind of works but WAY too slow with external nodes...
-    dropTargetProps.dragHover({
-      node: hoveredNode,//draggedNode,
-      path: dropTargetProps.path,//monitor.getItem().path,
-      minimumTreeIndex: dropTargetProps.treeIndex,//dropTargetProps.listIndex,
-      depth: hoveredDepth,//targetDepth,
-      // isExternal: true
-    });
+    // dropTargetProps.dragHover({
+    //   node: hoveredNode,//draggedNode,
+    //   path: dropTargetProps.path,//monitor.getItem().path,
+    //   minimumTreeIndex: dropTargetProps.treeIndex,//dropTargetProps.listIndex,
+    //   depth: hoveredDepth,//targetDepth,
+    //   // isExternal: true
+    // });
   },
 
   // canDrop,

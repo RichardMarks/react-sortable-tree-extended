@@ -13,10 +13,10 @@ const dragSpec = {
     const updateTreeData = props.updateTreeData
     const getNearestNode = () => {}
     return {
-      treeData,
+      node: props.node,
       DUMMY: 'HELLO THERE???',
       updateTreeData,
-      externalIsOver: monitor.isDragging(),
+      isExternalNode: true //monitor.isDragging(),
       // draggedNode: treeData[0],
       // getNearestNode
     }
